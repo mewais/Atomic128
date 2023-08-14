@@ -10,12 +10,13 @@
 namespace A128
 {
     template <typename T>
-    concept Size128 = requires(T a)
+    concept NiceSize128 = requires(T a)
     {
         requires sizeof(a) == 16 && std::alignment_of_v<T> == 16;
+        requires std::is_trivially_copyable_v<T> && std::is_copy_assignable_v<T> && std::is_move_assignable_v<T>;
     };
 
-    template <Size128 T>
+    template <NiceSize128 T>
     class Atomic128
     {
         private:
@@ -36,6 +37,10 @@ namespace A128
             explicit Atomic128(Args&&... args) : value(std::forward<Args>(args)...)
             {
             }
+
+            Atomic128(const Atomic128<T>&) = delete;
+
+            Atomic128(Atomic128<T>&&) = delete;
 
             void Store(T desired)
             {
@@ -139,6 +144,30 @@ namespace A128
 
                 expected = *(T*)&expected_data;
                 return success;
+            }
+
+            operator T()
+            {
+                return this->Load();
+            }
+
+            T& operator=(T desired)
+            {
+                this->Store(desired);
+                return desired;
+            }
+
+            T& operator=(const Atomic128<T>& desired) = delete;
+            T operator=(const Atomic128<T>&& desired) = delete;
+
+            bool operator==(T desired) requires std::equality_comparable<T>
+            {
+                return this->Load() == desired;
+            }
+
+            bool operator!=(T desired) requires std::equality_comparable<T>
+            {
+                return this->Load() != desired;
             }
     };
 }
