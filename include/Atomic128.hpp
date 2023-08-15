@@ -29,7 +29,7 @@ namespace A128
             T value;
 
         public:
-            Atomic128() : T()
+            Atomic128() : value()
             {
             }
 
