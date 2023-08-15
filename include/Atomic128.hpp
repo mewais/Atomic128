@@ -155,12 +155,13 @@ namespace A128
 #elif defined(__GNUC__) || defined(__GNUG__)
                 __asm__ __volatile__
                 (
-                    "lock cmpxchg16b %[dest_data]"
-                    : [dest_data] "+m" (*dest_data),
-                      [success] "=a" (success)
-                    : "a" (expected_data.low),
-                      "d" (expected_data.high),
-                      "b" (desired_data.low),
+                    "lock cmpxchg16b %1\n\t"
+                    "setz %0"
+                    : "=q" (success),
+                      "+m" (*dest_data),
+                      "+a" (expected_data.low),
+                      "+d" (expected_data.high)
+                    : "b" (desired_data.low),
                       "c" (desired_data.high)
                     : "memory",
                       "cc"
