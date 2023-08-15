@@ -70,7 +70,22 @@ namespace A128
                 Data* src_data = (Data*)(&this->value);
                 Data result_data = {0, 0};
 
-#if defined(__clang__) || defined(__GNUC__) || defined(__GNUG__)
+#if defined(__clang__)
+                __asm__ __volatile__
+                (
+                    "xor %%ecx, %%ecx\n"
+                    "xor %%eax, %%eax\n"
+                    "xor %%edx, %%edx\n"
+                    "xor %%ebx, %%ebx\n"
+                    "lock cmpxchg16b %2"
+                    : "=a" (result_data.low),
+                      "=d" (result_data.high)
+                    : "m" (*src_data)
+                    : "cc",
+                      "rbx",
+                      "rcx"
+                );
+#elif defined(__GNUC__) || defined(__GNUG__)
                 __asm__ __volatile__
                 (
                     "lock cmpxchg16b %1"
@@ -124,7 +139,20 @@ namespace A128
 
                 bool success;
 
-#if defined(__clang__) || defined(__GNUC__) || defined(__GNUG__)
+#if defined(__clang__)
+                __asm__ __volatile__
+                (
+                    "lock cmpxchg16b %1\n\t"
+                    "sete %0"
+                    : "=q" (success),
+                      "+m" (*dest_data),
+                      "+a" (expected_data.low),
+                      "+d" (expected_data.high)
+                    : "b" (desired_data.low),
+                      "c" (desired_data.high)
+                    : "cc", "memory"
+                );
+#elif defined(__GNUC__) || defined(__GNUG__)
                 __asm__ __volatile__
                 (
                     "lock cmpxchg16b %[dest_data]"

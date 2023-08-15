@@ -9,6 +9,14 @@ struct alignas(16) TestData
     uint32_t second;
     uint64_t third;
 
+    TestData() : first(0), second(0), third(0)
+    {
+    }
+
+    TestData(uint32_t first, uint32_t second, uint64_t third) : first(first), second(second), third(third)
+    {
+    }
+
     friend std::ostream& operator<<(std::ostream& os, const TestData& data)
     {
         os << "first: " << data.first << ", second: " << data.second << ", third: " << data.third;
