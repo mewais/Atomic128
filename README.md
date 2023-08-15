@@ -38,5 +38,7 @@ bool operator==(My128BitData expected);         // For comparing
 bool operator!=(My128BitData expected);         // For comparing
 ```
 
+Unfortunately, the library requires that you compile with the flag `-Wno-strict-aliasing` on GCC/Clang
+
 ## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
