@@ -2,6 +2,8 @@
 #define __ATOMIC128_HPP__
 
 #include <cstdint>
+#include <concepts>
+#include <utility>
 #include <type_traits>
 #if defined(_MSC_VER)
 #include <intrin.h>
@@ -180,10 +182,10 @@ namespace A128
                 return this->Load();
             }
 
-            T& operator=(T desired)
+            T& operator=(const T desired)
             {
                 this->Store(desired);
-                return desired;
+                return *this;
             }
 
             T& operator=(const Atomic128<T>& desired) = delete;
