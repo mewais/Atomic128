@@ -1,7 +1,7 @@
 [![FreePalestine.Dev](https://freepalestine.dev/header/1)](https://freepalestine.dev)
 
 # Atomic128
-This is a 128-bit generic atomic library for C++20 and above. It is based on inline assembly (CMPXCHG16B) and/or compiler intrinsics, and so is definitely only for x86_64. This choice was mainly made because GCC's atomic int128 requires linking with libatomic, something I was not keen on doing. So I wrote this up with support for GCC, Clang, as well MSVC.
+This is a 128-bit generic atomic library for C++11 and above. It is based on inline assembly (CMPXCHG16B) and/or compiler intrinsics, and so is definitely only for x86_64. This choice was mainly made because GCC's atomic int128 requires linking with libatomic, something I was not keen on doing. So I wrote this up with support for GCC, Clang, as well MSVC.
 
 ## Status
 This was only tested on GCC and Clang, I have not yet tested it with MSVC.
