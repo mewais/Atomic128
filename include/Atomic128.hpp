@@ -79,7 +79,7 @@ namespace A128
 #endif
             }
 
-            T Load()
+            T Load() const
             {
                 Data* src_data = (Data*)(&this->value);
                 Data result_data = {0, 0};
@@ -189,12 +189,12 @@ namespace A128
                 return success;
             }
 
-            operator T()
+            operator T() const
             {
                 return this->Load();
             }
 
-            T& operator=(const T desired)
+            T operator=(const T desired)
             {
                 this->Store(desired);
                 return *this;
